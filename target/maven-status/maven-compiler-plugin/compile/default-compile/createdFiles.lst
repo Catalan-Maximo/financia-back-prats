@@ -1,0 +1,6 @@
+com/FinancIA/api/domain/Usuario.class
+com/FinancIA/api/ApiApplication.class
+com/FinancIA/api/repository/UsuarioRepository.class
+com/FinancIA/api/controller/UsuarioController.class
+com/FinancIA/api/controller/HealthController.class
+com/FinancIA/api/controller/InversionController.class
