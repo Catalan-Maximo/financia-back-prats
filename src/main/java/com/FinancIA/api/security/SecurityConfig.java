@@ -2,6 +2,8 @@ package com.FinancIA.api.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,9 +16,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Configuración de Spring Security:
  * - Sesión stateless (JWT en cada request).
- * - Públicos: /api/v1/auth/** y /api/v1/health.
+ * - Públicos: /api/v1/auth/** (login/register) y /api/v1/health.
+ *   /api/v1/auth/validate es la excepción: exige token (devuelve 200 si es válido).
  * - Todo lo demás requiere token.
  * - CORS delegado a CorsConfig (WebMvcConfigurer).
+ *
+ * El AuthenticationManager usa automáticamente el UsuarioDetailsService
+ * y el PasswordEncoder (BCrypt) definidos en este contexto.
  */
 @Configuration
 public class SecurityConfig {
@@ -37,6 +43,7 @@ public class SecurityConfig {
             .exceptionHandling(e -> e.authenticationEntryPoint(
                     (request, response, ex) -> response.sendError(401)))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/auth/validate").authenticated()
                 .requestMatchers("/api/v1/auth/**", "/api/v1/health").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -46,5 +53,12 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /** Manager global: se usa en el login con el DaoAuthenticationProvider auto-configurado. */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+            throws Exception {
+        return configuration.getAuthenticationManager();
     }
 }

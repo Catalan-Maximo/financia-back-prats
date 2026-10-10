@@ -1,0 +1,16 @@
+# Build Maven
+target/
+
+# Secretos locales — nunca commitear
+.env
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+*.iml
+.vscode/

@@ -1,0 +1,173 @@
+{
+  "info": {
+    "name": "FinancIA Backend — JWT",
+    "description": "Demostración del flujo JWT del backend FinancIA (Fase 2).\n\nUso: ejecutar en orden. '03 Login' guarda el token en la variable de colección {{token}}; los requests 05 y 06 lo usan. Para el caso 'sin token' (07) Postman envía el request sin el header Authorization.\n\nDemo de expiración: levantar el backend con JWT_EXPIRACION_HORAS=0.00084 (tokens de ~3 segundos) y repetir 03 → 05 → esperar 5s → 05 (debe dar 401).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "01 Health (público)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('status 200', () => pm.response.to.have.status(200));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+      }
+    },
+    {
+      "name": "02 Register (crea usuario y devuelve JWT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('devuelve token', () => { const t = pm.response.json().token; pm.expect(t).to.be.a('string').with.lengthOf.at.least(50); pm.collectionVariables.set('token', t); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Alumno Demo\",\n  \"email\": \"alumno-demo@financia.com\",\n  \"password\": \"claveDePrueba123\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+      }
+    },
+    {
+      "name": "03 Login correcto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('guarda token', () => { const t = pm.response.json().token; pm.expect(t).to.be.a('string'); pm.collectionVariables.set('token', t); });",
+              "pm.test('el JWT tiene 3 partes (header.payload.firma)', () => pm.expect(pm.collectionVariables.get('token').split('.')).to.have.lengthOf(3));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alumno-demo@financia.com\",\n  \"password\": \"claveDePrueba123\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "04 Login incorrecto (debe dar 401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('status 401', () => pm.response.to.have.status(401));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alumno-demo@financia.com\",\n  \"password\": \"passwordEquivocada\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+      }
+    },
+    {
+      "name": "05 Validar token (200 solo si el JWT es válido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('devuelve el email del token', () => pm.expect(pm.response.json().email).to.eql('alumno-demo@financia.com'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/auth/validate", "host": ["{{baseUrl}}"], "path": ["auth", "validate"] }
+      }
+    },
+    {
+      "name": "06 Endpoint protegido CON token (debe dar 200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('status 200', () => pm.response.to.have.status(200));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/mercados/packs", "host": ["{{baseUrl}}"], "path": ["mercados", "packs"] }
+      }
+    },
+    {
+      "name": "07 Endpoint protegido SIN token (debe dar 401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('status 401', () => pm.response.to.have.status(401));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/mercados/packs", "host": ["{{baseUrl}}"], "path": ["mercados", "packs"] }
+      }
+    },
+    {
+      "name": "08 Token manipulado (debe dar 401 — falla la firma)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('status 401', () => pm.response.to.have.status(401));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}X" }
+        ],
+        "url": { "raw": "{{baseUrl}}/auth/validate", "host": ["{{baseUrl}}"], "path": ["auth", "validate"] }
+      }
+    }
+  ]
+}

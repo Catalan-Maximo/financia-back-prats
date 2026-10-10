@@ -1,0 +1,189 @@
+NAME                       INSTALLED              FIXED IN                                             TYPE          VULNERABILITY        SEVERITY    EPSS         RISK   
+postgresql                 42.7.10                42.7.11                                              java-archive  GHSA-98qh-xjc8-98pq  High        4.1% (90th)  3.1    
+tomcat-embed-core          11.0.21                11.0.22                                              java-archive  GHSA-r29c-68gh-xp6x  Critical    1.7% (76th)  1.6    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2024-28757       High        2.0% (80th)  1.5    
+tomcat-embed-core          11.0.21                11.0.22                                              java-archive  GHSA-h6fc-48rj-7qqh  Critical    1.3% (70th)  1.2    
+tomcat-embed-core          11.0.21                11.0.22                                              java-archive  GHSA-5m62-pw8w-7w9f  Critical    1.2% (67th)  1.1    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2025-59375       High        1.3% (69th)  1.0    
+jackson-databind           2.21.2                 2.21.4                                               java-archive  GHSA-rmj7-2vxq-3g9f  High        1.2% (67th)  1.0    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-rmj7-2vxq-3g9f  High        1.2% (67th)  1.0    
+micrometer-core            1.16.5                 1.16.6                                               java-archive  GHSA-g3pr-3p32-fp23  High        1.1% (63rd)  0.8    
+libpng16-16                1.6.39-2+deb12u3       1.6.39-2+deb12u4                                     deb           CVE-2026-33416       High        1.1% (63rd)  0.8    
+jackson-databind           2.21.2                 2.21.4                                               java-archive  GHSA-j3rv-43j4-c7qm  High        1.0% (61st)  0.8    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-j3rv-43j4-c7qm  High        1.0% (61st)  0.8    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-5450        Critical    0.7% (52nd)  0.7    
+openjdk                    21.0.10+7-LTS          1.8.0_492, 8.0.492, 11.0.31, 17.0.19, *21.0.11, ...  binary        CVE-2026-34282       High        0.9% (58th)  0.7    
+tomcat-embed-core          11.0.21                11.0.22                                              java-archive  GHSA-gx5v-xp9w-j4cg  High        0.9% (57th)  0.6    
+micrometer-core            1.16.5                 1.16.6                                               java-archive  GHSA-w737-wx49-qj23  High        0.8% (56th)  0.6    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-66046       High        0.7% (53rd)  0.6    
+spring-webmvc              7.0.7                  7.0.9                                                java-archive  GHSA-pc63-qcmh-9cmg  Critical    0.6% (47th)  0.6    
+spring-webmvc              7.0.7                  7.0.9                                                java-archive  GHSA-j9f9-w8pj-32f8  Critical    0.6% (45th)  0.5    
+tomcat-embed-core          11.0.21                11.0.25                                              java-archive  GHSA-9xv2-5v5q-p794  Critical    0.6% (45th)  0.5    
+openjdk                    21.0.10+7-LTS          1.8.0_492, 8.0.492, 11.0.31, 17.0.19, *21.0.11, ...  binary        CVE-2026-22016       High        0.7% (51st)  0.5    
+libc6                      2.36-9+deb12u13        2.36-9+deb12u14                                      deb           CVE-2026-4046        High        0.7% (50th)  0.5    
+tomcat-embed-core          11.0.21                11.0.25                                              java-archive  GHSA-gcx9-497g-6cp6  Critical    0.5% (43rd)  0.5    
+tomcat-embed-core          11.0.21                11.0.22                                              java-archive  GHSA-fv25-8xcx-gqjc  High        0.6% (49th)  0.5    
+libc6                      2.36-9+deb12u13        2.36-9+deb12u14                                      deb           CVE-2026-0915        High        0.6% (48th)  0.5    
+log4j-api                  2.25.4                 2.25.5                                               java-archive  GHSA-qv9r-c865-cp47  Medium      0.8% (55th)  0.5    
+jackson-databind           2.21.2                 2.21.6                                               java-archive  GHSA-q4xh-88c3-wmh7  High        0.6% (46th)  0.4    
+jackson-databind           3.1.2                  3.1.6                                                java-archive  GHSA-q4xh-88c3-wmh7  High        0.6% (46th)  0.4    
+tomcat-embed-core          11.0.21                11.0.25                                              java-archive  GHSA-h3x4-894j-xpx5  Critical    0.5% (39th)  0.4    
+libexpat1                  2.5.0-1+deb12u2                                                             deb           CVE-2026-77214       High        0.5% (44th)  0.4    
+jsoup                      1.18.3                 1.23.2                                               java-archive  GHSA-65r4-943x-97jj  High        0.5% (42nd)  0.4    
+jackson-core               2.21.2                 2.21.7                                               java-archive  GHSA-p6pp-m3f8-5c89  High        0.5% (44th)  0.4    
+jackson-core               3.1.2                  3.1.7                                                java-archive  GHSA-p6pp-m3f8-5c89  High        0.5% (44th)  0.4    
+jackson-databind           2.21.2                 2.21.6                                               java-archive  GHSA-gx83-3vf8-gh7j  Medium      0.7% (52nd)  0.4    
+jackson-databind           3.1.2                  3.1.6                                                java-archive  GHSA-gx83-3vf8-gh7j  Medium      0.7% (52nd)  0.4    
+tomcat-embed-core          11.0.21                11.0.22                                              java-archive  GHSA-5mp6-jrq3-r938  High        0.5% (41st)  0.4    
+jackson-core               2.21.2                 2.21.4                                               java-archive  GHSA-r7wm-3cxj-wff9  High        0.5% (38th)  0.4    
+jackson-core               3.1.2                  3.1.4                                                java-archive  GHSA-r7wm-3cxj-wff9  High        0.5% (38th)  0.4    
+libc6                      2.36-9+deb12u13        2.36-9+deb12u14                                      deb           CVE-2025-15281       High        0.5% (40th)  0.4    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-5928        High        0.5% (40th)  0.4    
+jackson-core               2.21.2                 2.21.7                                               java-archive  GHSA-7hhh-6rmp-j9qf  High        0.5% (40th)  0.4    
+jackson-core               3.1.2                  3.1.7                                                java-archive  GHSA-7hhh-6rmp-j9qf  High        0.5% (40th)  0.4    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-45186       High        0.5% (39th)  0.4    
+spring-webmvc              7.0.7                  7.0.8                                                java-archive  GHSA-x23c-287f-qqv5  High        0.5% (37th)  0.3    
+spring-expression          7.0.7                  7.0.8                                                java-archive  GHSA-r5w3-xv2f-j59q  High        0.5% (37th)  0.3    
+spring-data-commons        4.0.5                  4.0.6                                                java-archive  GHSA-88fw-v6x4-3f58  High        0.5% (37th)  0.3    
+spring-data-commons        4.0.5                  4.0.6                                                java-archive  GHSA-9fw2-h3hf-293r  High        0.5% (37th)  0.3    
+jackson-databind           2.21.2                 2.21.7                                               java-archive  GHSA-cxp5-3px4-pw24  High        0.4% (37th)  0.3    
+jackson-databind           2.21.2                 2.21.7                                               java-archive  GHSA-wv8q-qhhj-9h54  High        0.4% (37th)  0.3    
+jackson-databind           3.1.2                  3.1.7                                                java-archive  GHSA-cxp5-3px4-pw24  High        0.4% (37th)  0.3    
+jackson-databind           3.1.2                  3.1.7                                                java-archive  GHSA-wv8q-qhhj-9h54  High        0.4% (37th)  0.3    
+liblcms2-2                 2.14-2                 2.14-2+deb12u1                                       deb           CVE-2026-41254       High        0.4% (36th)  0.3    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-93990       High        0.4% (32nd)  0.3    
+libuuid1                   2.38.1-5+deb12u3       (won't fix)                                          deb           CVE-2026-3184        Medium      0.6% (48th)  0.3    
+libc6                      2.36-9+deb12u13        2.36-9+deb12u14                                      deb           CVE-2026-0861        High        0.4% (31st)  0.3    
+libexpat1                  2.5.0-1+deb12u2        (won't fix)                                          deb           CVE-2026-41080       High        0.4% (31st)  0.3    
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-41254       High        0.4% (36th)  0.3    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-5435        High        0.4% (31st)  0.3    
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2018-20796       Negligible  5.8% (92nd)  0.3    
+zlib1g                     1:1.2.13.dfsg-1                                                             deb           CVE-2026-85091       High        0.4% (27th)  0.3    
+gcc-12-base                12.2.0-14+deb12u1      (won't fix)                                          deb           CVE-2026-95619       High        0.4% (28th)  0.3    
+libgcc-s1                  12.2.0-14+deb12u1      (won't fix)                                          deb           CVE-2026-95619       High        0.4% (28th)  0.3    
+libstdc++6                 12.2.0-14+deb12u1      (won't fix)                                          deb           CVE-2026-95619       High        0.4% (28th)  0.3    
+libpng16-16                1.6.39-2+deb12u3       1.6.39-2+deb12u4                                     deb           CVE-2026-33636       High        0.4% (28th)  0.3    
+jackson-databind           2.21.2                 2.21.6                                               java-archive  GHSA-wjgm-6hv5-3cvf  Medium      0.5% (42nd)  0.3    
+jackson-databind           3.1.2                  3.1.6                                                java-archive  GHSA-wjgm-6hv5-3cvf  Medium      0.5% (42nd)  0.3    
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-47063       High        0.4% (27th)  0.3    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-6238        Medium      0.4% (36th)  0.3    
+libc6                      2.36-9+deb12u13        2.36-9+deb12u14                                      deb           CVE-2026-4437        High        0.3% (23rd)  0.2    
+jackson-databind           2.21.2                 2.21.4                                               java-archive  GHSA-3pjw-73gf-8qr5  Medium      0.4% (34th)  0.2    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-3pjw-73gf-8qr5  Medium      0.4% (34th)  0.2    
+spring-data-commons        4.0.5                  4.0.6                                                java-archive  GHSA-5m4m-73w9-8433  Medium      0.4% (36th)  0.2    
+spring-expression          7.0.7                  7.0.8                                                java-archive  GHSA-wxpp-56q6-5pcg  Medium      0.5% (37th)  0.2    
+jackson-databind           2.21.2                 2.21.4                                               java-archive  GHSA-9fxm-vc8v-hj55  Medium      0.4% (37th)  0.2    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-9fxm-vc8v-hj55  Medium      0.4% (37th)  0.2    
+jackson-databind           2.21.2                 2.21.5                                               java-archive  GHSA-5jmj-h7xm-6q6v  Medium      0.4% (36th)  0.2    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-5jmj-h7xm-6q6v  Medium      0.4% (36th)  0.2    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-19499       High        0.3% (20th)  0.2    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-77117       Medium      0.4% (33rd)  0.2    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-80489       Medium      0.4% (33rd)  0.2    
+jackson-databind           2.21.2                 2.21.5                                               java-archive  GHSA-5gvw-p9qm-jgwh  Medium      0.4% (30th)  0.2    
+jackson-databind           3.1.2                  3.1.5                                                java-archive  GHSA-5gvw-p9qm-jgwh  Medium      0.4% (30th)  0.2    
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-47021       Medium      0.4% (33rd)  0.2    
+spring-webmvc              7.0.7                  7.0.8                                                java-archive  GHSA-72pg-x5f8-j25j  Medium      0.4% (30th)  0.2    
+jackson-databind           2.21.2                 2.21.4                                               java-archive  GHSA-rcqc-6cw3-h962  Medium      0.4% (27th)  0.2    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-rcqc-6cw3-h962  Medium      0.4% (27th)  0.2    
+spring-webmvc              7.0.7                  7.0.8                                                java-archive  GHSA-3chg-m5w7-qfv5  High        0.3% (18th)  0.2    
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-47027       Medium      0.4% (30th)  0.2    
+openjdk                    21.0.10+7-LTS          11.0.32, 17.0.20, *21.0.12, 25.0.4, ...              binary        CVE-2026-46917       Medium      0.4% (30th)  0.2    
+spring-data-commons        4.0.5                  4.0.6                                                java-archive  GHSA-5vpf-xvv7-c8vh  Medium      0.4% (28th)  0.2    
+jackson-databind           2.21.2                 2.21.4                                               java-archive  GHSA-5hh8-q8hv-fr38  Medium      0.4% (30th)  0.2    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-5hh8-q8hv-fr38  Medium      0.4% (30th)  0.2    
+libexpat1                  2.5.0-1+deb12u2        (won't fix)                                          deb           CVE-2026-102633      Medium      0.3% (26th)  0.2    
+jackson-databind           2.21.2                 2.21.4                                               java-archive  GHSA-hgj6-7826-r7m5  Medium      0.4% (28th)  0.2    
+jackson-databind           3.1.2                  3.1.4                                                java-archive  GHSA-hgj6-7826-r7m5  Medium      0.4% (28th)  0.2    
+postgresql                 42.7.10                42.7.12                                              java-archive  GHSA-j92g-9f8w-j867  High        0.2% (13th)  0.2    
+spring-webmvc              7.0.7                  7.0.8                                                java-archive  GHSA-mq64-j8f9-9gcj  Medium      0.3% (25th)  0.2    
+openjdk                    21.0.10+7-LTS          1.8.0_504, 8.0.504, 11.0.32.1, *21.0.12.1, ...       binary        CVE-2026-61308       Medium      0.3% (21st)  0.2    
+gcc-12-base                12.2.0-14+deb12u1      (won't fix)                                          deb           CVE-2026-102010      High        0.2% (14th)  0.2    
+libgcc-s1                  12.2.0-14+deb12u1      (won't fix)                                          deb           CVE-2026-102010      High        0.2% (14th)  0.2    
+libstdc++6                 12.2.0-14+deb12u1      (won't fix)                                          deb           CVE-2026-102010      High        0.2% (14th)  0.2    
+tomcat-embed-core          11.0.21                11.0.22                                              java-archive  GHSA-9m89-8frq-c98c  Low         0.5% (43rd)  0.2    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-8674        Medium      0.3% (25th)  0.2    
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2026-76642       High        0.2% (11th)  0.2    
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-60147       Medium      0.3% (19th)  0.2    
+spring-security-web        7.0.5                  7.0.6                                                java-archive  GHSA-x2r2-rvhq-2mqv  Medium      0.3% (20th)  0.2    
+libc6                      2.36-9+deb12u13        2.36-9+deb12u14                                      deb           CVE-2026-4438        Medium      0.3% (22nd)  0.2    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-25210       High        0.2% (10th)  0.2    
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2019-1010022     Negligible  3.2% (87th)  0.2    
+jackson-databind           2.21.2                 2.21.5                                               java-archive  GHSA-vvgp-rfg2-7rr6  Medium      0.3% (22nd)  0.2    
+jackson-databind           3.1.2                  3.1.5                                                java-archive  GHSA-vvgp-rfg2-7rr6  Medium      0.3% (22nd)  0.2    
+spring-webmvc              7.0.7                  7.0.8                                                java-archive  GHSA-cjpg-rgq5-fr37  Medium      0.3% (21st)  0.2    
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2019-1010024     Negligible  3.2% (87th)  0.2    
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-46968       Medium      0.3% (19th)  0.2    
+openjdk                    21.0.10+7-LTS          1.8.0_492, 8.0.492, 11.0.31, 17.0.19, *21.0.11, ...  binary        CVE-2026-22021       Medium      0.3% (21st)  0.2    
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2019-1010023     Negligible  3.0% (87th)  0.2    
+jsoup                      1.18.3                 1.23.1                                               java-archive  GHSA-pmhh-3w7g-xqp8  Medium      0.3% (20th)  0.1    
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2026-78408       High        0.2% (7th)   0.1    
+openjdk                    21.0.10+7-LTS          1.8.0_504, 8.0.504, 11.0.32.1, *21.0.12.1, ...       binary        CVE-2026-70907       Medium      0.3% (18th)  0.1    
+spring-core                7.0.7                  7.0.8                                                java-archive  GHSA-659m-px2c-25wj  Low         0.4% (32nd)  0.1    
+openjdk                    21.0.10+7-LTS          1.8.0_492, 8.0.492, 11.0.31, 17.0.19, *21.0.11, ...  binary        CVE-2026-22013       Medium      0.3% (16th)  0.1    
+spring-webmvc              7.0.7                  7.0.8                                                java-archive  GHSA-957g-f97v-vppc  Medium      0.2% (14th)  0.1    
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2010-4756        Negligible  2.6% (85th)  0.1    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-6791        Medium      0.2% (11th)  0.1    
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2019-9192        Negligible  2.4% (83rd)  0.1    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-89092       Medium      0.3% (16th)  0.1    
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-19542       Medium      0.2% (12th)  0.1    
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2026-78410       High        0.2% (4th)   0.1    
+logback-core               1.5.32                 1.5.33                                               java-archive  GHSA-p47f-322f-whfh  Low         0.5% (44th)  0.1    
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2019-1010025     Negligible  2.3% (82nd)  0.1    
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2026-78409       High        0.2% (3rd)   0.1    
+logback-core               1.5.32                 1.5.34                                               java-archive  GHSA-jhq6-gfmj-v8fx  Low         0.4% (28th)  0.1    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-72522       Medium      0.2% (8th)   0.1    
+libexpat1                  2.5.0-1+deb12u2        (won't fix)                                          deb           CVE-2025-66382       Medium      0.2% (9th)   0.1    
+spring-webmvc              7.0.7                  7.0.8                                                java-archive  GHSA-h3qp-gqrc-q736  Medium      0.2% (12th)  0.1    
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-47059       Low         0.3% (21st)  0.1    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56406       Medium      0.2% (6th)   0.1    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56407       Medium      0.2% (6th)   0.1    
+zlib1g                     1:1.2.13.dfsg-1        (won't fix)                                          deb           CVE-2026-27171       Medium      0.2% (8th)   0.1    
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56403       Medium      0.2% (5th)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-50219       Medium      0.2% (7th)   < 0.1  
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2026-97399       Low         0.3% (19th)  < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56412       Medium      0.2% (6th)   < 0.1  
+spring-web                 7.0.7                  7.0.8                                                java-archive  GHSA-7m2p-62gw-p8qq  Medium      0.2% (10th)  < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-32777       Medium      0.2% (6th)   < 0.1  
+libfreetype6               2.12.1+dfsg-5+deb12u4  (won't fix)                                          deb           CVE-2026-95512       Medium      0.2% (6th)   < 0.1  
+openjdk                    21.0.10+7-LTS          1.8.0_492, 8.0.492, 11.0.31, 17.0.19, *21.0.11, ...  binary        CVE-2026-22018       Low         0.3% (17th)  < 0.1  
+openjdk                    21.0.10+7-LTS          1.8.0_504, 8.0.504, 11.0.32.1, *21.0.12.1, ...       binary        CVE-2026-60589       Low         0.3% (16th)  < 0.1  
+spring-expression          7.0.7                  7.0.8                                                java-archive  GHSA-9f52-rjqv-25qv  Low         0.3% (16th)  < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56131       Medium      0.2% (6th)   < 0.1  
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2026-13595       Medium      0.2% (5th)   < 0.1  
+openjdk                    21.0.10+7-LTS          1.8.0_502, 8.0.502, 11.0.32, 17.0.20, *21.0.12, ...  binary        CVE-2026-47010       Low         0.3% (15th)  < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-32776       Medium      0.2% (4th)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-32778       Medium      0.2% (4th)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-76957       High        0.1% (1st)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56404       Medium      0.1% (2nd)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56410       Medium      0.1% (2nd)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56411       Medium      0.1% (2nd)   < 0.1  
+libpng16-16                1.6.39-2+deb12u3       1.6.39-2+deb12u5                                     deb           CVE-2026-34757       Medium      0.2% (5th)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56405       Medium      0.1% (1st)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56408       Medium      0.1% (1st)   < 0.1  
+openjdk                    21.0.10+7-LTS          11.0.31, 17.0.19, *21.0.11, 25.0.3, ...              binary        CVE-2026-23865       Medium      0.1% (3rd)   < 0.1  
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-18374       Medium      0.1% (3rd)   < 0.1  
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2026-86805       Medium      0.1% (1st)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u3                                      deb           CVE-2026-56409       Medium      0.1% (1st)   < 0.1  
+spring-boot-autoconfigure  4.0.6                  4.0.7                                                java-archive  GHSA-ggg2-9786-hwc8  Medium      0.1% (2nd)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        (won't fix)                                          deb           CVE-2026-56132       Medium      0.1% (0th)   < 0.1  
+libuuid1                   2.38.1-5+deb12u3       (won't fix)                                          deb           CVE-2026-27456       Medium      0.1% (1st)   < 0.1  
+libexpat1                  2.5.0-1+deb12u2        2.5.0-1+deb12u4                                      deb           CVE-2026-24515       Low         0.2% (7th)   < 0.1  
+liblcms2-2                 2.14-2                                                                      deb           CVE-2025-29070       Negligible  1.0% (60th)  < 0.1  
+gcc-12-base                12.2.0-14+deb12u1                                                           deb           CVE-2022-27943       Negligible  0.9% (58th)  < 0.1  
+libgcc-s1                  12.2.0-14+deb12u1                                                           deb           CVE-2022-27943       Negligible  0.9% (58th)  < 0.1  
+libstdc++6                 12.2.0-14+deb12u1                                                           deb           CVE-2022-27943       Negligible  0.9% (58th)  < 0.1  
+openjdk                    21.0.10+7-LTS          1.8.0_492, 8.0.492, 11.0.31, 17.0.19, *21.0.11, ...  binary        CVE-2026-34268       Low         0.1% (3rd)   < 0.1  
+libc6                      2.36-9+deb12u13                                                             deb           CVE-2026-95818       Low         0.1% (2nd)   < 0.1  
+openjdk                    21.0.10+7-LTS          1.8.0_492, 8.0.492, 11.0.31, 17.0.19, *21.0.11, ...  binary        CVE-2026-22007       Low         0.1% (1st)   < 0.1  
+libc6                      2.36-9+deb12u13        (won't fix)                                          deb           CVE-2026-6368        Low         0.1% (1st)   < 0.1  
+libpng16-16                1.6.39-2+deb12u3                                                            deb           CVE-2021-4214        Negligible  0.5% (42nd)  < 0.1  
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2022-0563        Negligible  0.4% (34th)  < 0.1  
+libexpat1                  2.5.0-1+deb12u2                                                             deb           CVE-2023-52426       Negligible  0.4% (29th)  < 0.1  
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2025-14104       Negligible  0.2% (8th)   < 0.1  
+libpng16-16                1.6.39-2+deb12u3                                                            deb           CVE-2026-3713        Negligible  0.2% (6th)   < 0.1  
+libpng16-16                1.6.39-2+deb12u3       (won't fix)                                          deb           CVE-2025-28162       Negligible  0.2% (4th)   < 0.1  
+libpng16-16                1.6.39-2+deb12u3                                                            deb           CVE-2025-28164       Negligible  0.2% (4th)   < 0.1  
+jackson-databind           2.21.2                 2.21.5                                               java-archive  GHSA-mhm7-754m-9p8w  Medium      N/A          N/A    
+libpng16-16                1.6.39-2+deb12u3       1.6.39-2+deb12u6                                     deb           CVE-2026-46675       Unknown     N/A          N/A    
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2026-53613       Unknown     N/A          N/A    
+libuuid1                   2.38.1-5+deb12u3                                                            deb           CVE-2026-53615       Unknown     N/A          N/A

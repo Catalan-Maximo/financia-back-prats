@@ -35,6 +35,14 @@ public class GlobalExceptionHandler {
         return construir(HttpStatus.BAD_REQUEST, e.getMessage(), request);
     }
 
+    /** Login fallido: credenciales incorrectas → 401 (no 400). */
+    @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> manejarCredencialesInvalidas(
+            org.springframework.security.authentication.BadCredentialsException e,
+            HttpServletRequest request) {
+        return construir(HttpStatus.UNAUTHORIZED, "Credenciales inválidas", request);
+    }
+
     /** Errores de validación de DTOs (@Valid): 400 con el detalle de cada campo. */
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> manejarValidacion(

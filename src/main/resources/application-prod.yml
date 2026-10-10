@@ -1,0 +1,17 @@
+# Perfil de producción (Azure Container Apps).
+# DB_URL, DB_USERNAME y DB_PASSWORD llegan como secretos/env de Azure.
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      # ponytail: update crea el esquema solo; migrar a validate + Flyway si el esquema se estabiliza
+      ddl-auto: update
+    show-sql: false
+
+# Cierre ordenado: deja drenar peticiones antes de apagar (útil en ACA).
+server:
+  shutdown: graceful

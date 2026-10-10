@@ -1,0 +1,59 @@
+# Entorno local completo: backend Spring Boot + PostgreSQL.
+#
+# Las credenciales se toman del archivo .env (gitignored, NO versionado):
+#   DB_USERNAME, DB_PASSWORD, JWT_SECRET y opcionalmente GROQ_API_KEY.
+# No hay contraseñas reales en este archivo.
+#
+# Uso:
+#   docker compose up -d          → levanta todo (BD primero, app cuando BD está healthy)
+#   docker compose up -d --build  → lo mismo, reconstruyendo la imagen del backend
+#   docker compose logs -f api    → logs del backend
+#   docker compose ps             → estado de los servicios
+#   docker compose down           → para y borra los contenedores (los datos de la BD NO se pierden)
+#   docker compose down -v        → borra también el volumen con los datos de la BD
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: financia-db
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-financia}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?falta DB_PASSWORD en .env}
+      POSTGRES_DB: financia
+    ports:
+      # 5433 en la Mac para no chocar con el PostgreSQL local (5432)
+      - "5433:5432"
+    volumes:
+      - financia-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-financia} -d financia"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      args:
+        VERSION: ${VERSION:-dev}
+        VCS_REF: ${VCS_REF:-unknown}
+        BUILD_DATE: ${BUILD_DATE:-unknown}
+    container_name: financia-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      # Dentro de la red de compose la BD se llama "db" (puerto interno 5432)
+      DB_URL: jdbc:postgresql://db:5432/financia
+      DB_USERNAME: ${DB_USERNAME:-financia}
+      DB_PASSWORD: ${DB_PASSWORD:?falta DB_PASSWORD en .env}
+      JWT_SECRET: ${JWT_SECRET:?falta JWT_SECRET en .env}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    # Sin healthcheck propio: la imagen distroless no trae shell ni curl,
+    # y el arranque ya espera a que la BD esté healthy. El estado real de
+    # la app se mira con GET /api/v1/health (y en F13 con Actuator).
+
+volumes:
+  financia-db-data:

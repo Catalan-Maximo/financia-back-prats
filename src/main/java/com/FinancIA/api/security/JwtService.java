@@ -22,13 +22,14 @@ public class JwtService {
     private final long expiracionMs;
 
     public JwtService(@Value("${jwt.secret:}") String secret,
-                      @Value("${jwt.expiracion-horas:24}") long horas) {
+                      @Value("${jwt.expiracion-horas:24}") double horas) {
         if (secret == null || secret.length() < 32) {
             throw new IllegalStateException(
                     "JWT_SECRET no configurada o muy corta: definir una clave de al menos 32 caracteres");
         }
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.expiracionMs = horas * 3_600_000L;
+        // double (y no long) para permitir expiraciones sub-hora en demos/tests
+        this.expiracionMs = (long) (horas * 3_600_000L);
     }
 
     /** Genera un token firmado con el email como subject. */

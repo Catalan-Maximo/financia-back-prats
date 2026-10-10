@@ -1,11 +1,17 @@
 package com.FinancIA.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "usuarios")
 @Data
+/**
+ * El hash del password y el push token nunca viajan en las respuestas JSON
+ * (POST /perfil, GET /usuarios/{id}, etc.).
+ */
+@JsonIgnoreProperties({"password", "pushToken"})
 public class Usuario {
     
     @Id

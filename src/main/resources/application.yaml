@@ -1,15 +1,25 @@
 spring:
   application:
     name: financia-api
+  # Carga opcional de .env local (gitignored) para desarrollo.
+  # En producción las variables llegan como secretos/env de Azure.
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    default: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/financia
-    username: postgres
-    password: 21062004
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    hikari:
+      # Pool dimensionado para la app real: 1 réplica, ~30 endpoints,
+      # 2 jobs diarios. 10 conexiones máx es holgado; 2 idle mantiene
+      # el pool tibio sin retener conexiones al pedo.
+      maximum-pool-size: 10
+      minimum-idle: 2
+      # Fail fast: si la BD no responde en 5 s, la petición falla rápido
+      # en vez de colgar 30 s (default de Hikari).
+      connection-timeout: 5000
+      idle-timeout: 600000
+      # Debe ser menor que cualquier timeout del lado del servidor de BD.
+      max-lifetime: 1800000
 
 # IA de Groq — la API key va por variable de entorno GROQ_API_KEY.
 # Si no está configurada, el asesor usa la lógica rule-based como fallback.
@@ -23,4 +33,4 @@ groq:
 # (mínimo 32 caracteres). Sin ella, la app no arranca.
 jwt:
   secret: ${JWT_SECRET:}
-  expiracion-horas: 24
+  expiracion-horas: ${JWT_EXPIRACION_HORAS:24}

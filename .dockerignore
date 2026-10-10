@@ -1,0 +1,26 @@
+# Git y secretos: nunca entran al contexto de build
+.git
+.env
+.env.*
+
+# Build local
+target/
+
+# Documentación y tooling que la imagen no necesita
+*.md
+.dockerignore
+Dockerfile
+docker-compose.yml
+.github/
+postman/
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log

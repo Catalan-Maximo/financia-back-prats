@@ -14,10 +14,18 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Lee el header "Authorization: Bearer <token>", valida el JWT
- * y setea el usuario autenticado en el SecurityContext.
- * Si el token falta o es inválido, deja la petición sin autenticar
- * (los endpoints protegidos devuelven 401).
+ * Lee el header "Authorization: Bearer <token>" y valida el JWT
+ * (firma + expiración, pura criptografía) sin consultar la BD.
+ *
+ * Esa es la ventaja del JWT stateless: la autenticación no depende
+ * de la BD en cada request. Si la BD está caída, los endpoints de
+ * datos fallan con 500 (el error real), no con un 401 engañoso que
+ * haría desloguear al usuario del front.
+ *
+ * El principal es el email (subject del token); el modelo no tiene
+ * roles, por eso las authorities quedan vacías.
+ * Trade-off conocido: un usuario borrado de la BD mantiene su token
+ * válido hasta la expiración (24 h por defecto).
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
