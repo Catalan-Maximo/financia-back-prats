@@ -11,6 +11,6 @@ public class HealthController {
 
     @GetMapping
     public Map<String, String> checkHealth() {
-        return Map.of("status", "OK", "message", "FinancIA Backend corriendo perfectamente");
+        return Map.of("status", "OK", "message", "FinancIA Backend corriendo perfectamente (build CI/CD)");
     }
 }
