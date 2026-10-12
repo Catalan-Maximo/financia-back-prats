@@ -106,15 +106,12 @@ jobs:
 
       - name: Desplegar la nueva imagen en Container Apps
         run: |
+          # Las variables de entorno y los secretos ya viven en la config de la
+          # app (creados en F9) y persisten entre revisiones. El ambiente express
+          # no acepta PATCH de secrets, así que el deploy solo apunta a la imagen
+          # nueva: la config queda intacta.
           az containerapp update -n financia-back -g rg-financia \
-            --image ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }} \
-            --set-env-vars SPRING_PROFILES_ACTIVE=prod \
-              DB_USERNAME=financia \
-              'DB_URL=jdbc:postgresql://financia-pg.postgres.database.azure.com:5432/financia?sslmode=require' \
-              'DB_PASSWORD=secretref:db-pass' \
-              'JWT_SECRET=secretref:jwt-secret' \
-            --secret db-pass="${{ secrets.AZURE_DB_PASSWORD }}" \
-            --secret jwt-secret="${{ secrets.AZURE_JWT_SECRET }}"
+            --image ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }}
 
       - name: Verificar que la app responda
         run: |
