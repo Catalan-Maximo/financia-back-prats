@@ -114,7 +114,7 @@ jobs:
               'DB_PASSWORD=secretref:db-pass' \
               'JWT_SECRET=secretref:jwt-secret' \
             --secret db-pass="${{ secrets.AZURE_DB_PASSWORD }}" \
-                      jwt-secret="${{ secrets.AZURE_JWT_SECRET }}"
+            --secret jwt-secret="${{ secrets.AZURE_JWT_SECRET }}"
 
       - name: Verificar que la app responda
         run: |
