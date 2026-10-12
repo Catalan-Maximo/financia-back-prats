@@ -34,3 +34,19 @@ groq:
 jwt:
   secret: ${JWT_SECRET:}
   expiracion-horas: ${JWT_EXPIRACION_HORAS:24}
+
+# Observabilidad: health público (probes de Azure + verificación de BD),
+# metrics e info requieren JWT (ver SecurityConfig).
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: always
+
+info:
+  app:
+    name: financia-api
+    java: ${java.version}

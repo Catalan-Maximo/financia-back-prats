@@ -45,6 +45,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/validate").authenticated()
                 .requestMatchers("/api/v1/auth/**", "/api/v1/health").permitAll()
+                // Health de Actuator público para probes/monitoreo; el resto
+                // de /actuator (metrics, info...) sigue exigiendo JWT.
+                .requestMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
