@@ -19,7 +19,8 @@
 ```bash
 URL=https://financia-back.wonderfulpond-2573e809.southcentralus.azurecontainerapps.io
 
-curl -s $URL/actuator/health                 # público: {"status":"UP","components":{"db":{"status":"UP"}}}
+curl -s $URL/actuator/health                 # público (anónimo): {"status":"UP"}
+curl -s -H "Authorization: Bearer <token>" $URL/actuator/health   # autenticado: + componentes (db UP, detalles)
 curl -s $URL/actuator/metrics                # 401 sin token
 curl -s -H "Authorization: Bearer <token>" $URL/actuator/metrics/hikaricp.connections.active
 ```
@@ -49,8 +50,8 @@ ContainerAppConsoleLogs
 
 | Pregunta | Respuesta / demo |
 |---|---|
-| ¿Spring Boot está funcionando? | `/actuator/health` → UP (público) |
-| ¿Se conecta a la BD? | componente `db` del health: UP/DOWN con detalle PostgreSQL |
+| ¿Spring Boot está funcionando? | `/actuator/health` → UP (público, sin detalles) |
+| ¿Se conecta a la BD? | componente `db` del health (visible autenticado: UP/DOWN con detalle PostgreSQL) |
 | ¿Una petición llegó? | línea del RequestLoggingFilter en Log stream |
 | ¿El login funcionó? | `POST /api/v1/auth/login -> 200 (X ms)` + Postman |
 | ¿Cuánto tardó una petición? | `(X ms)` del filtro + métrica `http.server.requests` |

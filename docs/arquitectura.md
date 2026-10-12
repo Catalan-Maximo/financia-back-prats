@@ -49,8 +49,8 @@ este stack, no copiados.
 ```mermaid
 flowchart TB
     DEV[Dev en VS Code] -->|git push| GHA[GitHub Actions]
-    GHA --> CI[Job CI: mvn test<br/>+ build amd64<br/>+ Grype]
-    CI -->|mensaje [deploy] o dispatch| CD[Job CD: azure/login SP<br/>+ push ACR<br/>+ update ACA<br/>+ verify health]
+    GHA --> CI[Job CI: mvn test<br/>+ build amd64<br/>+ Grype<br/>+ push ACR]
+    CI -->|mensaje [deploy] o dispatch| CD[Job CD: azure/login SP<br/>+ update ACA<br/>+ verify health]
     CD --> ACR[crfinancia.azurecr.io<br/>financia-back:SHA]
     ACR --> ACA[Container App<br/>financia-back]
     ACA --> PG[Azure PostgreSQL<br/>financia-pg]

@@ -68,7 +68,7 @@
 6. **Portal**: la app sigue con la MISMA imagen anterior (Overview).
 7. **Resultado**: nueva imagen en ACR (tag nuevo), app sin cambios.
 8. **Demo**: comparar el tag nuevo en ACR con la imagen activa de la app (distintos).
-9. **Explicación**: "el push dispara solo la integración continua: tests, build y escaneo; el despliegue exige una condición explícita para no publicar cambios sin querer".
+9. **Explicación**: "el push dispara la integración continua: tests, build, escaneo con Grype y **publicación de la imagen en ACR** — publicar y desplegar son cosas distintas; el despliegue exige una condición explícita (`[deploy]` o el botón) para que la app nunca cambie sin intención".
 10. **Errores**: CI rojo → abrir el paso fallido y leer el log (los errores históricos están en [ci-cd.md](ci-cd.md)).
 
 ## E6. Publicar imagen en ACR sin desplegar
@@ -76,7 +76,7 @@
 2. **Concepto**: build/push ≠ deploy (el workflow original de Go solo hacía esto).
 3. **VS Code**: nada.
 4. **Comandos**: `az acr login --name crfinancia` + `docker buildx build --platform linux/amd64 --push -t crfinancia.azurecr.io/financia-back:<tag> .` (manual).
-5. **GitHub**: el CASO A deja la imagen en ACR sin desplegar (el job cd no corre) — o ejecutar solo el push manual.
+5. **GitHub**: el **CASO A ya publica solo**: cada push deja la imagen en ACR (paso "Publicar la imagen versionada en ACR (sin desplegar)" del job CI) y el CD no corre. Alternativa manual: los comandos del punto 4 sin tocar GitHub.
 6. **Portal**: ACR → tag nuevo presente; la app sin cambios.
 7. **Resultado**: imagen en ACR, app intacta.
 8. **Demo**: `az acr repository show-tags` vs `az containerapp show --query ...image`.
@@ -88,7 +88,7 @@
 2. **Concepto**: despliegue continuo condicionado por convención de commit.
 3. **VS Code**: cambio visible (health message es el elegido).
 4. **Comandos**: `git add -A && git commit -m "[deploy] ..." && git push`.
-5. **GitHub**: Actions → CI verde → CD verde con sus 5 pasos.
+5. **GitHub**: Actions → CI verde (que ya publicó la imagen) → CD verde con sus pasos (login SP → update → verificación).
 6. **Portal**: la app muestra la imagen nueva; Overview → revisión actualizada.
 7. **Resultado**: nueva versión viva en Azure.
 8. **Demo**: `curl <URL>/api/v1/health` → mensaje nuevo; Postman login → 200.
@@ -147,7 +147,7 @@
 1. **Qué pide**: probar que la app ve la BD.
 2. **Concepto**: health indicator db + HikariCP + TLS.
 3. **VS Code**: nada.
-4. **Comandos**: `curl <URL>/actuator/health` (componente db) · `PGPASSWORD=$(cat ~/financia-pg.txt) psql "host=financia-pg.postgres.database.azure.com user=financia dbname=financia sslmode=require" -c "SELECT 1"`.
+4. **Comandos**: `curl <URL>/actuator/health` (anónimo: solo `status`; el detalle `db` se ve autenticado) · `PGPASSWORD=$(cat ~/financia-pg.txt) psql "host=financia-pg.postgres.database.azure.com user=financia dbname=financia sslmode=require" -c "SELECT 1"`.
 5. **GitHub**: nada.
 6. **Portal**: PostgreSQL → `financia-pg` → Overview (estado, métricas).
 7. **Resultado**: `db: UP` + psql responde.
@@ -211,7 +211,7 @@ Formato: **P. pregunta** — Respuesta técnica → *Frase oral* → 📁 dónde
 
 1. **¿Qué es integración continua?** — Verificar cada cambio automáticamente (build + tests + escaneo) al integrarlo al repo. → *"Cada push pasa por una batería de chequeos antes de que nadie lo use."* → 📁 job `ci` → 🔬 push sin [deploy].
 2. **¿Qué es despliegue continuo?** — Llevar a producción el cambio verificado, automáticamente y bajo condición explícita. → *"Una vez que el cambio pasó los chequeos, va solo a Azure."* → 📁 job `cd` → 🔬 CASO B.
-3. **¿Qué sucede cuando hacemos push a GitHub?** — El workflow arranca: CI (test+build+Grype) y, si el mensaje dice [deploy], CD (push ACR + update ACA + verify). → 📁 `.github/workflows/ci-cd.yml` → 🔬 pestaña Actions.
+3. **¿Qué sucede cuando hacemos push a GitHub?** — El workflow arranca: CI (test+build+Grype+**publicación en ACR**) y, si el mensaje dice [deploy], CD (update de la app con esa imagen + verificación). → 📁 `.github/workflows/ci-cd.yml` → 🔬 pestaña Actions.
 4. **¿Cómo generamos una imagen sin desplegar?** — Push sin [deploy]: el CI construye y escanea; el CD queda skipped. → 🔬 CASO A: tag nuevo en ACR, app con la imagen anterior.
 5. **¿Cómo condicionamos el despliegue?** — `if:` con `contains(github.event.head_commit.message, '[deploy]')` o el input del dispatch. → 📁 ci-cd.yml (bloque if del job cd).
 6. **¿Dónde queda la imagen Docker versionada?** — `crfinancia.azurecr.io/financia-back:<sha>`. → 🔬 `az acr repository show-tags`.
@@ -221,7 +221,7 @@ Formato: **P. pregunta** — Respuesta técnica → *Frase oral* → 📁 dónde
 10. **¿Para qué usamos el Service Principal?** — Para que GitHub Actions opere Azure sin credenciales humanas. → 🔬 job cd, paso azure/login.
 11. **¿Dónde están las credenciales del SP?** — GitHub Secret `AZURE_CREDENTIALS` (JSON con clientId/secret/subscription/tenant). → 🔬 Settings → Secrets.
 12. **¿Cómo funciona la autenticación de GitHub Actions contra Azure?** — azure/login intercambia el JSON del SP por un token de Azure para el CLI del runner. → 🔬 log del paso "Login en Azure".
-13. **¿Cómo publicamos una imagen versionada?** — `az acr login` + `docker buildx build --push -t crfinancia.azurecr.io/financia-back:<sha>` (o el job cd). 
+13. **¿Cómo publicamos una imagen versionada?** — El job CI la publica automáticamente en cada push después de Grype (`az acr login` + `docker push crfinancia.azurecr.io/financia-back:<sha>`); también se puede a mano con esos mismos dos comandos. 
 14. **¿Cómo comprobamos que la imagen existe en ACR?** — `az acr repository show-tags --name crfinancia --repository financia-back`.
 15. **¿Cómo sabemos qué versión se ejecuta en Azure?** — `az containerapp show ... --query properties.template.containers[0].image` o Overview del portal. → 🔬 E9.
 16. **¿Cómo detenemos la aplicación?** — Portal → Stop (el CLI no tiene start/stop en esta versión). → 🔬 E13.

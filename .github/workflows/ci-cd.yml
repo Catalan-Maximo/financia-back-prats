@@ -17,7 +17,7 @@ env:
 jobs:
   # ── CI: compila, testea, construye la imagen y la escanea con Grype ──────
   ci:
-    name: CI — test + build + Grype
+    name: CI — test + build + Grype + publicar
     runs-on: ubuntu-latest
     services:
       # PostgreSQL para el test contextLoads (usa la BD real)
@@ -72,6 +72,18 @@ jobs:
           severity-cutoff: critical
           output-format: table
 
+      # La imagen que CI construyó y escaneó es la MISMA que se publica.
+      # Publicar ≠ desplegar: esto deja la versión en ACR sin tocar la app.
+      - name: Login en Azure (Service Principal)
+        uses: azure/login@v3
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Publicar la imagen versionada en ACR (sin desplegar)
+        run: |
+          az acr login --name crfinancia
+          docker push ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }}
+
   # ── CD: publica en ACR y despliega — solo bajo condición explícita ───────
   cd:
     name: CD — push a ACR + deploy
@@ -95,21 +107,13 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Construir y publicar imagen versionada en ACR
+      - name: Desplegar la imagen publicada por CI en Container Apps
         run: |
-          az acr login --name crfinancia
-          docker buildx build --platform linux/amd64 --push \
-            --build-arg VERSION=${{ steps.sha.outputs.short }} \
-            --build-arg VCS_REF=${{ steps.sha.outputs.short }} \
-            --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
-            -t ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }} .
-
-      - name: Desplegar la nueva imagen en Container Apps
-        run: |
+          # No reconstruye ni republica: CI ya publicó la imagen escaneada con
+          # este mismo tag (SHA del commit). El deploy solo apunta la app a ella.
           # Las variables de entorno y los secretos ya viven en la config de la
           # app (creados en F9) y persisten entre revisiones. El ambiente express
-          # no acepta PATCH de secrets, así que el deploy solo apunta a la imagen
-          # nueva: la config queda intacta.
+          # no acepta PATCH de secrets, por eso solo se cambia --image.
           az containerapp update -n financia-back -g rg-financia \
             --image ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }}
 

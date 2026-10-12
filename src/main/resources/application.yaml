@@ -44,7 +44,8 @@ management:
         include: health,metrics,info
   endpoint:
     health:
-      show-details: always
+      # Público: solo {"status":"UP"}. Autenticado: detalles por componente (db, etc.)
+      show-details: when-authorized
 
 info:
   app:

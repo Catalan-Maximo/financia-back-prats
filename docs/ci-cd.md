@@ -6,7 +6,7 @@
 
 ## Estructura (dos jobs separados — la teoría CI vs CD)
 
-**Job `ci`** (corre SIEMPRE en cada push a main — no usa secretos):
+**Job `ci`** (corre SIEMPRE en cada push a main):
 1. `actions/checkout` — baja el código.
 2. `actions/setup-java` (temurin 21, cache Maven).
 3. **PostgreSQL como service container** (postgres:17-alpine con healthcheck) — el test
@@ -15,21 +15,23 @@
 5. `docker buildx build --platform linux/amd64 --load` con etiquetas OCI (SHA del commit).
 6. **Grype** (`anchore/scan-action`) con `severity-cutoff: critical` — el pipeline
    **falla si aparecen vulnerabilidades críticas**.
+7. **Publicar en ACR**: `azure/login` (SP) + `az acr login` + `docker push` — la imagen
+   escaneada queda versionada en el registro. **Publicar ≠ desplegar.**
 
-**Job `cd`** (corre SOLO bajo condición explícita — usa los secrets):
-1. `azure/login` con el Service Principal (`secrets.AZURE_CREDENTIALS`).
-2. `az acr login` + `docker buildx build --push` → imagen `crfinancia.azurecr.io/financia-back:<sha>`.
-3. `az containerapp update --image <nueva>` — **solo la imagen**: las variables de entorno
+**Job `cd`** (corre SOLO bajo condición explícita):
+1. `azure/login` con el Service Principal.
+2. `az containerapp update --image <la que CI publicó>` — **no reconstruye ni republica**:
+   despliega exactamente la imagen que CI ya probó y escaneó. Las variables de entorno
    y secretos de la app persisten entre revisiones (el ambiente express no acepta
    parchear secretos; eso simplificó el paso y evitó otro error).
-4. Verificación: bucle que espera `/api/v1/health` = 200.
+3. Verificación: bucle que espera `/api/v1/health` = 200.
 
 ## Los tres casos (requisito del parcial)
 
 | Caso | Disparador | Resultado |
 |---|---|---|
-| A — CI sin deploy | push normal (mensaje sin `[deploy]`) | imagen construida y escaneada; CD "skipped" |
-| B — CI + CD | commit con `[deploy]` en el mensaje | pipeline completo hasta la verificación en Azure |
+| A — CI sin deploy | push normal (mensaje sin `[deploy]`) | imagen construida, escaneada y **publicada en ACR**; CD "skipped" (la app no cambia) |
+| B — CI + CD | commit con `[deploy]` en el mensaje | CI publica; CD despliega esa misma imagen y verifica |
 | C — manual | pestaña Actions → "Run workflow" → marcar **deploy** | igual que B, sin tocar código |
 
 La condición en el workflow:
@@ -44,8 +46,8 @@ if: |
 
 | Secret | Contenido | Quién lo usa |
 |---|---|---|
-| `AZURE_CREDENTIALS` | JSON `{clientId, clientSecret, subscriptionId, tenantId}` del SP | `azure/login` (job cd) |
-| `AZURE_DB_PASSWORD` | password del PostgreSQL de Azure | (reservado; hoy el deploy no la reenvía porque persiste en la app) |
+| `AZURE_CREDENTIALS` | JSON `{clientId, clientSecret, subscriptionId, tenantId}` del SP | `azure/login` en **ambos jobs** (CI publica, CD despliega) |
+| `AZURE_DB_PASSWORD` | password del PostgreSQL de Azure | (reservado; el deploy no la reenvía porque persiste en la app) |
 | `AZURE_JWT_SECRET` | clave JWT de producción | ídem |
 
 Los secretos nunca aparecen en logs: GitHub los muestra como `***`.

@@ -40,8 +40,8 @@ Compilar/testear sin Docker: `./mvnw test` (requiere PostgreSQL local y `JWT_SEC
 
 ## CI/CD (resumen)
 
-- Push a `main` → **CI**: `mvn test` (PostgreSQL como service), build amd64, **Grype** (falla si hay críticas).
-- Commit con `[deploy]` o dispatch manual con la casilla → **+ CD**: login con Service Principal, push a ACR con tag = SHA, update de la Container App, verificación de health.
+- Push a `main` → **CI**: `mvn test` (PostgreSQL como service), build amd64, **Grype** (falla si hay críticas), y **publicación en ACR** con tag = SHA (publicar ≠ desplegar).
+- Commit con `[deploy]` o dispatch manual con la casilla → **+ CD**: login con Service Principal, update de la Container App con la imagen publicada, verificación de health.
 
 ## Credenciales / secretos
 
