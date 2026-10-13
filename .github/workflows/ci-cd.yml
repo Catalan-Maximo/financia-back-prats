@@ -1,8 +1,41 @@
+# ══════════════════════════════════════════════════════════════════════════
+# CI/CD DE FINANCIA — ¿cómo funciona este archivo?
+# ══════════════════════════════════════════════════════════════════════════
+#
+# Este archivo es la "receta" que GitHub Actions lee en cada push a main.
+# Define DOS trabajos (jobs) que corren en máquinas de GitHub:
+#
+#   JOB CI  (corre SIEMPRE, en cada push):
+#     1. Baja el código (checkout) y configura Java 21.
+#     2. Levanta una PostgreSQL TEMPORAL (solo para el test).
+#     3. Corre los tests con Maven.
+#     4. Construye la imagen Docker amd64 con etiquetas OCI (SHA del commit).
+#     5. La escanea con Grype (si hay vulnerabilidades CRÍTICAS, falla TODO).
+#     6. Se autentica en Azure con el Service Principal y PUBLICA la imagen
+#        en ACR con el tag = SHA del commit.
+#        └─ PUBLICAR ≠ DESPLEGAR: la app en Azure sigue intacta.
+#
+#   JOB CD  (corre SOLO si se cumple una condición explícita):
+#     1. Se autentica en Azure con el mismo Service Principal.
+#     2. Actualiza la Container App para usar la imagen que CI ya publicó
+#        (no reconstruye nada).
+#     3. Verifica que la app responda 200 en /api/v1/health.
+#
+#   ¿Cuándo corre el CD? (los 3 casos del parcial)
+#     CASO A: push normal (mensaje SIN "[deploy]") → solo CI.
+#     CASO B: commit con "[deploy]" en el mensaje → CI + CD.
+#     CASO C: botón manual en GitHub marcando la casilla "deploy" → CI + CD.
+# ══════════════════════════════════════════════════════════════════════════
+
 name: CI/CD — build, scan, push y deploy condicionado
 
+# ── EVENTOS: qué dispara este workflow ────────────────────────────────────
 on:
+  # Cada push a la rama main (los CASOS A y B dependen de esto).
   push:
     branches: [main]
+  # Disparo manual desde la pestaña Actions (CASO C). El input "deploy" es la
+  # casilla que aparece en el botón "Run workflow".
   workflow_dispatch:
     inputs:
       deploy:
@@ -10,17 +43,23 @@ on:
         type: boolean
         default: false
 
+# ── VARIABLES DEL WORKFLOW (no son secretos, pueden quedar públicas) ───────
 env:
   ACR_SERVER: crfinancia.azurecr.io
   IMAGE_NAME: financia-back
 
 jobs:
-  # ── CI: compila, testea, construye la imagen y la escanea con Grype ──────
+  # ═══════════════════════════════════════════════════════════════════════
+  # JOB CI — verifica el código y publica la imagen SIN desplegar
+  # ═══════════════════════════════════════════════════════════════════════
   ci:
     name: CI — test + build + Grype + publicar
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # máquina Linux estándar de GitHub
+
+    # ── SERVICE CONTAINER: PostgreSQL temporal para los tests ─────────────
+    # El test contextLoads necesita una BD real (no desactivamos tests).
+    # Este postgres vive SOLO mientras corre el job y NO es la BD de Azure.
     services:
-      # PostgreSQL para el test contextLoads (usa la BD real)
       postgres:
         image: postgres:17-alpine
         env:
@@ -29,34 +68,50 @@ jobs:
           POSTGRES_DB: financia
         ports:
           - 5432:5432
+        # GitHub espera a que la BD esté sana antes de seguir.
         options: >-
           --health-cmd "pg_isready -U postgres -d financia"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+
+    # ── VARIABLES DE ENTORNO DEL JOB: apuntan la app al postgres temporal ──
+    # (Equivalen a lo que en Azure ponen los secrets de Container Apps.)
     env:
       DB_URL: jdbc:postgresql://localhost:5432/financia
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
       JWT_SECRET: ci-secret-solo-para-tests-1234567890abcdefghij
+
     steps:
+      # Baja el código del repo a la máquina de GitHub.
       - uses: actions/checkout@v5
 
-      # El SHA corto se calcula con sintaxis de shell y se publica como output.
-      # En los bloques `with:` NO se expande ${...} — solo ${{ ... }}.
+      # Publica el SHA corto del commit como "output" para usarlo después
+      # como tag de la imagen. IMPORTANTE (error que ya nos comimos): en los
+      # bloques `with:` de las acciones NO se expande la sintaxis de shell
+      # ${...} — solo las expresiones de GitHub ${{ ... }}. Por eso se calcula
+      # acá con un paso de shell y se consume con steps.sha.outputs.short.
       - name: Calcular SHA corto
         id: sha
         run: echo "short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
+      # Instala Java 21 (Temurin) y cachea las dependencias Maven para
+      # que los siguientes runs no las vuelvan a descargar.
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
 
+      # Compila y ejecuta los tests contra el PostgreSQL temporal.
+      # Si un test falla, el job se corta acá (nada se publica).
       - name: Compilar y ejecutar tests
         run: ./mvnw -B test
 
+      # Construye la imagen para linux/amd64 (la arquitectura de Azure).
+      # Las etiquetas OCI quedan con VERSION y VCS_REF = SHA del commit:
+      # así la imagen dice de qué commit viene (trazabilidad).
       - name: Construir imagen amd64 (etiquetas OCI con el SHA del commit)
         run: |
           docker buildx build --platform linux/amd64 --load \
@@ -65,6 +120,9 @@ jobs:
             --build-arg BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
             -t ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }} .
 
+      # Escanea la imagen recién construida. severity-cutoff: critical
+      # significa "fallá si hay vulnerabilidades críticas": es la alarma de
+      # seguridad automática del pipeline.
       - name: Escanear vulnerabilidades con Grype (falla si hay CRÍTICAS)
         uses: anchore/scan-action@v6
         with:
@@ -72,32 +130,41 @@ jobs:
           severity-cutoff: critical
           output-format: table
 
-      # La imagen que CI construyó y escaneó es la MISMA que se publica.
-      # Publicar ≠ desplegar: esto deja la versión en ACR sin tocar la app.
+      # Entra a Azure como el robot sp-financia-ci (no como persona):
+      # las credenciales vienen del secret AZURE_CREDENTIALS de GitHub.
       - name: Login en Azure (Service Principal)
         uses: azure/login@v3
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # PUBLICACIÓN: sube al registro la MISMA imagen que se construyó y
+      # escaneó. Este paso NO toca la app en Azure — publicar ≠ desplegar.
       - name: Publicar la imagen versionada en ACR (sin desplegar)
         run: |
           az acr login --name crfinancia
           docker push ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }}
 
-  # ── CD: publica en ACR y despliega — solo bajo condición explícita ───────
+  # ═══════════════════════════════════════════════════════════════════════
+  # JOB CD — despliega la imagen que CI publicó (solo bajo condición)
+  # ═══════════════════════════════════════════════════════════════════════
   cd:
-    name: CD — push a ACR + deploy
+    name: CD — deploy + verificación
     runs-on: ubuntu-latest
-    needs: ci
-    # CASO A (solo CI): push normal sin "[deploy]" en el mensaje del commit.
-    # CASO B (CI + CD): commit con "[deploy]" en el mensaje.
-    # CASO C (manual): workflow_dispatch marcando "deploy".
+    needs: ci   # espera a que CI termine BIEN antes de arrancar
+
+    # ── LA CONDICIÓN DE DESPLIEGUE ────────────────────────────────────────
+    # El CD corre solo si:
+    #   - se disparó manualmente (workflow_dispatch) Y marcaron deploy, O
+    #   - el push trae "[deploy]" en el mensaje del commit.
+    # Cualquier otro push (fix:, add:, etc.) → CD queda "skipped".
     if: |
       (github.event_name == 'workflow_dispatch' && inputs.deploy) ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy]'))
     steps:
       - uses: actions/checkout@v5
 
+      # Igual que en CI: el tag de la imagen es el SHA corto del commit.
+      # (El CD despliega la imagen que CI publicó con ESE MISMO tag.)
       - name: Calcular SHA corto
         id: sha
         run: echo "short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
@@ -107,16 +174,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # EL DESPLIEGUE: un solo comando que apunta la Container App a la
+      # imagen nueva. No reconstruye ni republica nada: CI ya publicó la
+      # imagen escaneada con este tag. Las variables de entorno y los
+      # secretos de la app persisten entre revisiones (el ambiente express
+      # no acepta parchear secretos — por eso solo se cambia --image).
       - name: Desplegar la imagen publicada por CI en Container Apps
         run: |
-          # No reconstruye ni republica: CI ya publicó la imagen escaneada con
-          # este mismo tag (SHA del commit). El deploy solo apunta la app a ella.
-          # Las variables de entorno y los secretos ya viven en la config de la
-          # app (creados en F9) y persisten entre revisiones. El ambiente express
-          # no acepta PATCH de secrets, por eso solo se cambia --image.
           az containerapp update -n financia-back -g rg-financia \
             --image ${{ env.ACR_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.sha.outputs.short }}
 
+      # VERIFICACIÓN FINAL: espera hasta 5 minutos a que la app responda
+      # 200 en /api/v1/health. Si no responde, el deploy se marca fallido.
       - name: Verificar que la app responda
         run: |
           URL=$(az containerapp show -n financia-back -g rg-financia \
