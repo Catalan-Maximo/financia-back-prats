@@ -318,8 +318,12 @@ az containerapp update -n financia-back -g rg-financia --image crfinancia.azurec
 curl https://financia-back.wonderfulpond-2573e809.southcentralus.azurecontainerapps.io/api/v1/health
 
 # Mini script de administración (como el script_az.py de la cursada, versión corta)
-python3 azfinancia.py estado       # app + imagen + health en vivo (sin argumentos hace esto)
-python3 azfinancia.py tags         # versiones en el ACR
-python3 azfinancia.py recursos     # todos los recursos del grupo
-python3 azfinancia.py imagen <sha> # rollback / apuntar a otra versión (pide confirmación)
+python3 azfinancia.py                    # sin argumentos = estado
+python3 azfinancia.py estado             # app + imagen + health en vivo
+python3 azfinancia.py tags               # versiones en el ACR (con mensaje del commit)
+python3 azfinancia.py recursos           # todos los recursos del grupo
+python3 azfinancia.py metricas           # métricas Hikari/JVM/HTTP (pide login; o: metricas email password)
+python3 azfinancia.py imagen <sha>       # rollback / apuntar a otra versión (pide confirmación)
+python3 azfinancia.py frenar / prender   # abre el portal en la página del Stop/Start (el CLI no puede)
+python3 azfinancia.py logs               # abre el Log stream del portal (el CLI no puede en express)
 ```
